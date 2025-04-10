@@ -1,0 +1,53 @@
+openapi: 3.0.3
+info:
+  title: Product Search API
+  version: 1.0.0
+  description: Endpoint to search for products by keyword.
+
+servers:
+  - url: https://test.dotweb.co.il
+
+paths:
+  /api/system/v1/search_products:
+    post:
+      summary: Search products
+      operationId: searchProducts
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                keyword:
+                  type: string
+                  example: product
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Response from product search
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+      security:
+        - bearerAuth: []
+      tags:
+        - Products
+      parameters:
+        - in: header
+          name: Cookie
+          schema:
+            type: string
+          required: false
+          example: buy2day_session=c5QTtLs3sLe3ClfovEW4aCxRBP3k8wsK5NmRSVXR
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
