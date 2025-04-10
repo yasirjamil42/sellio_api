@@ -6,8 +6,12 @@ info:
 servers:
   - url: https://test.dotweb.co.il/api/system/v1
     description: Sandbox environment (use for testing only)
-  - url: {domain}/api/system/v1
+  - url: '{domain}/api/system/v1'
     description: Production environment (live API)
+    variables:
+      domain:
+        default: 'https://your-production-domain.com'
+        description: 'Replace with your production domain URL'
 paths:
   /stocks:
     post:
