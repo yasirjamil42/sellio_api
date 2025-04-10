@@ -1,53 +1,240 @@
 openapi: 3.0.3
 info:
-  title: Product Search API
+  title: DotWeb API Documentation
+  description: API for interacting with DotWeb services like product search, stock, orders, etc.
   version: 1.0.0
-  description: Endpoint to search for products by keyword.
-
 servers:
-  - url: https://test.dotweb.co.il
-
+  - url: https://test.dotweb.co.il/api/system/v1
 paths:
-  /api/system/v1/search_products:
+  /stocks:
     post:
-      summary: Search products
-      operationId: searchProducts
+      summary: Get Stock Information
+      description: Retrieves stock information. `lang` and `keyword` are optional.
+      operationId: getStock
+      parameters:
+        - name: lang
+          in: query
+          description: Language code (e.g., 'he' for Hebrew)
+          required: false
+          schema:
+            type: string
+        - name: keyword
+          in: query
+          description: Product keyword for searching stock (optional, can be empty)
+          required: false
+          schema:
+            type: string
       requestBody:
         required: true
         content:
-          application/x-www-form-urlencoded:
+          application/json:
+            schema:
+              type: object
+              properties:
+                lang:
+                  type: string
+                keyword:
+                  type: string
+              required: []
+      responses:
+        '200':
+          description: Successful retrieval of stock data
+        '401':
+          description: Unauthorized — missing Authorization token
+        '400':
+          description: Bad Request — check your parameters
+
+  /search_products:
+    post:
+      summary: Search for Products
+      description: Search for products based on the `keyword`. `lang` is optional.
+      operationId: searchProducts
+      parameters:
+        - name: lang
+          in: query
+          description: Language code (e.g., 'he' for Hebrew)
+          required: false
+          schema:
+            type: string
+        - name: keyword
+          in: query
+          description: Product keyword for searching products (required)
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                lang:
+                  type: string
+                keyword:
+                  type: string
+              required:
+                - keyword
+      responses:
+        '200':
+          description: Successful retrieval of product search results
+        '401':
+          description: Unauthorized — missing Authorization token
+        '400':
+          description: Bad Request — missing `keyword`
+
+  /search_by_cities:
+    post:
+      summary: Get Delivery Dates by City
+      description: Fetch delivery dates for a given city. `keyword` is required.
+      operationId: searchByCity
+      parameters:
+        - name: keyword
+          in: query
+          description: City name (e.g., "תל אביב")
+          required: true
+          schema:
+            type: string
+        - name: lang
+          in: query
+          description: Language code (e.g., 'he' for Hebrew)
+          required: false
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
             schema:
               type: object
               properties:
                 keyword:
                   type: string
-                  example: product
+                lang:
+                  type: string
       responses:
         '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                type: object
-                description: Response from product search
-        '400':
-          description: Bad request
+          description: Successful retrieval of delivery dates by city
         '401':
-          description: Unauthorized
-      security:
-        - bearerAuth: []
-      tags:
-        - Products
+          description: Unauthorized — missing Authorization token
+        '400':
+          description: Bad Request — missing `keyword`
+
+  /search_by_area:
+    post:
+      summary: Get Delivery Dates by Area
+      description: Fetch delivery dates for a given area. `keyword` is optional.
+      operationId: searchByArea
       parameters:
-        - in: header
-          name: Cookie
+        - name: keyword
+          in: query
+          description: Area name (e.g., "תל אביב")
+          required: false
           schema:
             type: string
+        - name: lang
+          in: query
+          description: Language code (e.g., 'he' for Hebrew)
           required: false
-          example: buy2day_session=c5QTtLs3sLe3ClfovEW4aCxRBP3k8wsK5NmRSVXR
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                keyword:
+                  type: string
+                lang:
+                  type: string
+      responses:
+        '200':
+          description: Successful retrieval of delivery dates by area
+        '401':
+          description: Unauthorized — missing Authorization token
+        '400':
+          description: Bad Request — check your parameters
 
-components:
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
+  /orders:
+    post:
+      summary: Get Latest 5 Orders
+      description: Retrieves the latest 5 orders. `keyword` is required and should be a valid phone/email combination.
+      operationId: getLatestOrders
+      parameters:
+        - name: keyword
+          in: query
+          description: Search keyword (phone number or email)
+          required: true
+          schema:
+            type: string
+        - name: lang
+          in: query
+          description: Language code (e.g., 'he' for Hebrew)
+          required: false
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                keyword:
+                  type: string
+                lang:
+                  type: string
+      responses:
+        '200':
+          description: Successful retrieval of the latest 5 orders
+        '401':
+          description: Unauthorized — missing Authorization token
+        '400':
+          description: Bad Request — missing `keyword`
+
+  /get_pdf:
+    post:
+      summary: Get PDF Link for Order
+      description: Get a PDF link for the order based on phone number and order number.
+      operationId: getPdfLink
+      parameters:
+        - name: phone
+          in: query
+          description: Customer's phone number
+          required: true
+          schema:
+            type: string
+        - name: order_number
+          in: query
+          description: Order number
+          required: true
+          schema:
+            type: string
+        - name: lang
+          in: query
+          description: Language code (e.g., 'he' for Hebrew)
+          required: false
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phone:
+                  type: string
+                order_number:
+                  type: string
+                lang:
+                  type: string
+      responses:
+        '200':
+          description: Successful retrieval of PDF link
+        '401':
+          description: Unauthorized — missing Authorization token
+        '400':
+          description: Bad Request — missing `phone` or `order_number`
