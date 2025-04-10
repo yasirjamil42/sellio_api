@@ -5,6 +5,9 @@ info:
   version: 1.0.0
 servers:
   - url: https://test.dotweb.co.il/api/system/v1
+    description: Sandbox environment (use for testing only)
+  - url: {domain}/api/system/v1
+    description: Production environment (live API)
 paths:
   /stocks:
     post:
@@ -159,8 +162,8 @@ paths:
 
   /orders:
     post:
-      summary: Get Latest 5 Orders
-      description: Retrieves the latest 5 orders. `keyword` is required and should be a valid phone/email combination.
+      summary: Get Latest Orders
+      description: Retrieves the latest orders. `keyword` is required and should be a valid phone/email combination.
       operationId: getLatestOrders
       parameters:
         - name: keyword
@@ -188,7 +191,7 @@ paths:
                   type: string
       responses:
         '200':
-          description: Successful retrieval of the latest 5 orders
+          description: Successful retrieval of the latest orders
         '401':
           description: Unauthorized — missing Authorization token
         '400':
