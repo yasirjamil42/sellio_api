@@ -50,6 +50,8 @@ paths:
           description: Unauthorized — missing Authorization token
         '400':
           description: Bad Request — check your parameters
+      security:
+        - AuthorizationHeader: []
 
   /search_products:
     post:
@@ -89,6 +91,8 @@ paths:
           description: Unauthorized — missing Authorization token
         '400':
           description: Bad Request — missing `keyword`
+      security:
+        - AuthorizationHeader: []
 
   /search_by_cities:
     post:
@@ -126,6 +130,8 @@ paths:
           description: Unauthorized — missing Authorization token
         '400':
           description: Bad Request — missing `keyword`
+      security:
+        - AuthorizationHeader: []
 
   /search_by_area:
     post:
@@ -163,6 +169,8 @@ paths:
           description: Unauthorized — missing Authorization token
         '400':
           description: Bad Request — check your parameters
+      security:
+        - AuthorizationHeader: []
 
   /orders:
     post:
@@ -200,6 +208,8 @@ paths:
           description: Unauthorized — missing Authorization token
         '400':
           description: Bad Request — missing `keyword`
+      security:
+        - AuthorizationHeader: []
 
   /get_pdf:
     post:
@@ -245,3 +255,13 @@ paths:
           description: Unauthorized — missing Authorization token
         '400':
           description: Bad Request — missing `phone` or `order_number`
+      security:
+        - AuthorizationHeader: []
+
+components:
+  securitySchemes:
+    AuthorizationHeader:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'Include the Authorization token in the request header for all endpoints.'
