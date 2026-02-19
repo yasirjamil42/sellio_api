@@ -267,12 +267,21 @@ paths:
       summary: Get Full Updated Detail Orders for Max Last 30 Minutes
       description: Returns full detailed orders Updated in Max Last 30 minutes. Requires Authorization header only.
       operationId: getUpdatedFullDetailOrdersLast30Minutes
-      requestBody:
+      parameters:
         - name: time
           in: query
           required: true
           schema:
             type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                time:
+                  type: string
       responses:
         '200':
           description: Successful
