@@ -262,6 +262,26 @@ paths:
           description: Bad Request
       security:
         - AuthorizationHeader: []
+  /get_updated_orders:
+    post:
+      summary: Get Full Updated Detail Orders for Max Last 30 Minutes
+      description: Returns full detailed orders Updated in Max Last 30 minutes. Requires Authorization header only.
+      operationId: getUpdatedFullDetailOrdersLast30Minutes
+      requestBody:
+        - name: time
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful
+        '401':
+          description: Unauthorized
+        '400':
+          description: Bad Request
+      security:
+        - AuthorizationHeader: []
   /get_pdf:
     post:
       summary: Get PDF Link for Order
